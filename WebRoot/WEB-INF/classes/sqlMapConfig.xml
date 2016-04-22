@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMapConfig
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<settings useStatementNamespaces="true" enhancementEnabled="true" lazyLoadingEnabled="true" cacheModelsEnabled="true" />
+<!-- manage start -->
+	<sqlMap resource="com/linjj/thinkweixin/vo/sqlmap/z_user_SqlMap.xml"/>
+
+<!-- manage end -->
+
+<!-- view start -->
+	
+	<sqlMap resource="com/linjj/thinkweixin/vo/sqlmap/z_account_SqlMap.xml"/>
+	<sqlMap resource="com/linjj/thinkweixin/vo/sqlmap/z_article_SqlMap.xml"/>
+	<sqlMap resource="com/linjj/thinkweixin/vo/sqlmap/z_menu_SqlMap.xml"/>
+
+<!-- view end -->
+</sqlMapConfig>

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="z_menu">
+  <typeAlias alias="ZMenu" type="com.linjj.thinkweixin.vo.ZMenu" />
+  <!-- for common use -->
+  <resultMap id="get-ZMenu-result" class="ZMenu">
+        <result property="menuId" column="menuId" />
+        <result property="menuName" column="menuName" />
+        <result property="pMenuId" column="pMenuId" />
+        <result property="isShow" column="isShow" />
+        <result property="disport" column="disport" />
+        <result property="createDate" column="createDate" />
+        <result property="link" column="link" />
+        
+  </resultMap>
+
+  <!-- for other join result map-->
+  <resultMap id="join-z_menu-result" class="ZMenu">
+        <result property="menuId" column="z_menu__menuId" />
+        <result property="menuName" column="z_menu__menuName" />
+        <result property="pMenuId" column="z_menu__pMenuId" />
+        <result property="isShow" column="z_menu__isShow" />
+        <result property="disport" column="z_menu__disport" />
+        <result property="createDate" column="z_menu__createDate" />
+        <result property="link" column="z_menu__link" />
+  </resultMap>
+  
+
+  <!--findBy 通过唯一关键字取得- 返回具体对象-->
+  <select id="findByPk" resultMap="get-ZMenu-result" parameterClass="com.linjj.thinkweixin.common.Params">
+    SELECT menuId menuId,menuName menuName,pMenuId pMenuId,createDate createDate,isShow isShow,disport disport,link link
+      FROM t_menu
+      WHERE $name$ = #value#
+    <isNotNull prepend=" AND " property="conditions" >
+      $conditions$
+    </isNotNull>
+  </select>
+    <!--findAll 通过conditons取得，需要注意sql注入问题。返回list-->
+    <select id="findAllbyConds" resultMap="get-ZMenu-result" parameterClass="com.linjj.thinkweixin.common.Params">
+    SELECT menuId menuId,menuName menuName,pMenuId pMenuId,createDate createDate,isShow isShow,disport disport,link link
+      FROM t_menu
+    <isNotNull prepend=" WHERE " property="conditions" >
+      $conditions$
+    </isNotNull>
+    <isNotNull prepend=" order by " property="order" >
+      $order$
+    </isNotNull>
+  </select>
+  
+
+  <!--findAllbyPage 通过分页信息及conditons取得，需要注意sql注入问题。返回list-->
+    <select id="findAllbyPageConds" resultMap="get-ZMenu-result" parameterClass="com.linjj.thinkweixin.common.Params">
+        SELECT menuId menuId,menuName menuName,pMenuId pMenuId,createDate createDate,isShow isShow,disport disport,link link 
+		from ( select D.*, ROWNUM RN 
+		   from (
+				SELECT menuId menuId,menuName menuName,pMenuId pMenuId,createDate createDate ,isShow isShow,disport disport,link link
+				FROM t_menu A
+                <isNotNull prepend=" WHERE " property="conditions" >
+			      $conditions$
+			    </isNotNull>
+			    <isNotNull prepend=" order by " property="order" >
+			      $order$
+			    </isNotNull>
+		) D
+		where ROWNUM &lt;= #endNum# ) WHERE RN &gt;=#startNum#
+  </select>
+
+  <!--findByObj 通过具体对象取得。返回list-->
+   <select id="findAllbyObj" resultMap="get-ZMenu-result" parameterClass="ZMenu">
+    SELECT menuId menuId,menuName menuName,pMenuId pMenuId,createDate createDate,isShow isShow,disport disport,link link
+      FROM t_menu
+    <dynamic prepend=" WHERE " >
+      
+      <isNotNull prepend=" and " property="menuId" >
+                    menuId = #menuId#
+                  </isNotNull>
+      
+        <isNotNull prepend=" and " property="menuName" >
+                    menuName = #menuName#
+                  </isNotNull>
+                  
+        <isNotNull prepend=" and " property="pMenuId" >
+                    pMenuId = #pMenuId#
+                  </isNotNull>
+      
+        <isNotNull prepend=" and " property="createDate" >
+                    "createDate" = #"createDate"#
+                  </isNotNull>
+         <isNotNull prepend=" and " property="disport" >
+                    "disport" = #"disport"#
+                  </isNotNull>
+         <isNotNull prepend=" and " property="isShow" >
+          			 "isShow" = #"isShow"#
+         			</isNotNull>
+         <isNotNull prepend=" and " property="link" >
+          			 ""link"" = #""link""#
+        			 </isNotNull>
+      
+      
+    </dynamic>
+  </select>
+
+  <!--更新部分内容-->
+  <update id="updateByObj" parameterClass="ZMenu">
+    UPDATE t_menu
+    <dynamic prepend="set" >
+      
+        <isNotNull prepend="," property="menuId" >
+                    menuId = #menuId#
+                  </isNotNull>
+      
+        <isNotNull prepend="," property="menuName" >
+                    menuName = #menuName#
+                  </isNotNull>
+                  
+        <isNotNull prepend="," property="pMenuId" >
+                    pMenuId = #pMenuId#
+                  </isNotNull>
+      
+        <isNotNull prepend="," property="createDate" >
+                    "createDate" = #"createDate"#
+                  </isNotNull>
+                  
+                   <isNotNull prepend=" , " property="disport" >
+                    "disport" = #"disport"#
+                  </isNotNull>
+                  <isNotNull prepend=" , " property="isShow" >
+                    "isShow" = #"isShow"#
+                  </isNotNull>
+                    <isNotNull prepend=" , " property="link" >
+                    ""link"" = #""link""#
+                  </isNotNull>
+      
+    </dynamic>
+    WHERE menuId = #menuId#
+  </update>
+
+  <!--更新全部内容-->
+  <update id="updateByExample" parameterClass="ZMenu">
+    UPDATE t_menu
+    SET menuId=#menuId#,menuName=#menuName#,pMenuId=#pMenuId#,createDate=#createDate#,isShow=#isShow#,disport=#disport#,link=#link#
+    WHERE menuId = #menuId#
+  </update>
+
+
+  <update id="updateAttrByPK" parameterClass="com.linjj.thinkweixin.common.Params">
+    UPDATE t_menu
+    SET $name1$ = #value1#
+    WHERE $name$ = #value#
+  </update>
+
+  <update id="updateAttrByCondition" parameterClass="com.linjj.thinkweixin.common.Params">
+    UPDATE t_menu
+    SET $name1$ = #value1#
+    <isNotNull prepend=" where " property="conditions" >
+      $conditions$
+    </isNotNull>
+  </update>
+
+  <!--通过主键删除-->
+  <delete id="deleteByPk" parameterClass="com.linjj.thinkweixin.common.Params">
+    DELETE FROM t_menu
+      WHERE $name$ = #value#
+  </delete>
+
+  <!--通过条件删除-->
+  <delete id="deleteByConds" parameterClass="com.linjj.thinkweixin.common.Params">
+    DELETE FROM t_menu
+      WHERE $conditions$
+  </delete>
+
+  <!--插入-->
+  <insert id="insertInTo" parameterClass="ZMenu" >
+    INSERT INTO t_menu(menuId,menuName,pMenuId,createDate,isShow,disport,link)
+      VALUES (#menuId#,#menuName#,#pMenuId#,#createDate#,#isShow#,#disport#,#link#)
+  </insert>
+
+  <!--统计总数-->
+  <select id="countByConds" resultClass="java.lang.Integer" parameterClass="com.linjj.thinkweixin.common.Params">
+    SELECT count(1) FROM t_menu A WHERE $conditions$
+  </select>
+  
+  <select id="countByObj" parameterClass="ZMenu" resultClass="java.lang.Integer" >
+    SELECT count(1) FROM t_menu
+    <dynamic prepend=" WHERE " >
+      
+        <isNotNull prepend=" and " property="menuId" >
+                    menuId = #menuId#
+                  </isNotNull>
+      
+        <isNotNull prepend=" and " property="menuName" >
+                    menuName = #menuName#
+                  </isNotNull>
+                  
+        <isNotNull prepend=" and " property="pMenuId" >
+                    pMenuId = #pMenuId#
+                  </isNotNull>
+      
+        <isNotNull prepend=" and " property="createDate" >
+                    "createDate" = #"createDate"#
+                  </isNotNull>
+                  <isNotNull prepend=" and " property="disport" >
+                    "disport" = #"disport"#
+                  </isNotNull>
+                  <isNotNull prepend=" and " property="isShow" >
+                    "isShow" = #"isShow"#
+                  </isNotNull>
+                    <isNotNull prepend=" and " property="link" >
+                    "link" = #"link"#
+                  </isNotNull>
+      
+    </dynamic>
+  </select>
+  
+<!--
+/*BEGIN*/
+//注意请勿修改BEGIN和END两行!!!!!!
+/*请在此处进行所需要的修改,出了BEGIN END注释块进行的修改将在下一次生成时被覆盖*/
+-->
+  
+<!--
+/*END*/
+-->
+
+</sqlMap>

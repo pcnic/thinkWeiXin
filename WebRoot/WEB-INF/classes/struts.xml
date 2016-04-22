@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <package name="thinkweixin-interceptor" extends="struts-default"> 
+          <interceptors>    
+			    <interceptor name="SecurityInterceptor" class="com.linjj.thinkweixin.filter.ProjectInterceptor"></interceptor>   
+			    <interceptor-stack name="myDefaultStack">    
+			        <interceptor-ref name="SecurityInterceptor"></interceptor-ref>    
+			        <interceptor-ref name="defaultStack"></interceptor-ref>    
+			    </interceptor-stack>    
+			</interceptors>    
+			<default-interceptor-ref name="myDefaultStack"></default-interceptor-ref>     
+    </package>
+
+
+<!-- 管理页面Action -->
+	<include file="com/linjj/thinkweixin/web/manager/action/manager_action.xml"></include>
+<!-- 展示页面Action -->
+	<include file="com/linjj/thinkweixin/web/view/action/view_action.xml"></include>
+
+
+	<constant name="struts.multipart.saveDir" value="/tmp"/> 
+	<constant name= "struts.multipart.maxSize" value="5000000000000000" />
+	<!-- The end -->
+	<include file="struts-default.xml" />
+	<package name="default" namespace="/" extends="thinkweixin-interceptor">
+		<action name="login" class="com.linjj.thinkweixin.web.manager.action.LoginAction" method="login">
+			<result name="success"  type="redirect" >index.jsp</result>
+			<result name="error">login.jsp</result>
+		</action>
+		<action name="loginOut" class="com.linjj.thinkweixin.web.manage.action.LoginAction" method="loginOut"></action>
+	</package>
+	
+</struts>
+

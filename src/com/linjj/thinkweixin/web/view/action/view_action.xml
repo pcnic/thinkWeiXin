@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="view" namespace="/view" extends="thinkweixin-interceptor">
+	<!-- 使用*通配符方式匹配save，list，edit,del方法 --> 
+	     <action name="account*" class="accountAction" method="{1}">
+			<result name="success">accountList.jsp</result>
+			<result name="{1}">account{1}.jsp</result>
+			<result name="error">error.jsp</result>
+		</action>
+		
+		<action name="article*" class="articleAction"  method="{1}">
+			<result name="success">articleList.jsp</result>
+			<result name="{1}">account{1}.jsp</result>
+			<result name="error">error.jsp</result>
+		</action>
+		
+		<action name="menu*" class="menuAction" method="{1}">
+			<result name="success">header.jsp</result>
+			<result name="{1}">menu{1}.jsp</result>
+			<result name="error">error.jsp</result>
+		</action>
+	        
+	</package>
+</struts>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="z_user">
+  <typeAlias alias="ZUser" type="com.linjj.thinkweixin.vo.ZUser" />
+  <!-- for common use -->
+  <resultMap id="get-ZUser-result" class="ZUser">
+        <result property="userId" column="userId" />
+        <result property="userName" column="userName" />
+        <result property="passWord" column="passWord" />
+        <result property="createDate" column="createDate" />
+        
+  </resultMap>
+
+  <!-- for other join result map-->
+  <resultMap id="join-z_user-result" class="ZUser">
+        <result property="userId" column="z_user__userId" />
+        <result property="userName" column="z_user__userName" />
+        <result property="passWord" column="z_user__passWord" />
+        <result property="createDate" column="z_user__createDate" />
+  </resultMap>
+  
+
+  <!--findBy 通过唯一关键字取得- 返回具体对象-->
+  <select id="findByPk" resultMap="get-ZUser-result" parameterClass="com.linjj.thinkweixin.common.Params">
+    SELECT userId userId,userName userName,passWord passWord,createDate createDate
+      FROM t_user
+      WHERE $name$ = #value#
+    <isNotNull prepend=" AND " property="conditions" >
+      $conditions$
+    </isNotNull>
+  </select>
+    <!--findAll 通过conditons取得，需要注意sql注入问题。返回list-->
+    <select id="findAllbyConds" resultMap="get-ZUser-result" parameterClass="com.linjj.thinkweixin.common.Params">
+    SELECT userId userId,userName userName,passWord passWord,createDate createDate
+      FROM t_user
+    <isNotNull prepend=" WHERE " property="conditions" >
+      $conditions$
+    </isNotNull>
+    <isNotNull prepend=" order by " property="order" >
+      $order$
+    </isNotNull>
+  </select>
+  
+
+  <!--findAllbyPage 通过分页信息及conditons取得，需要注意sql注入问题。返回list-->
+    <select id="findAllbyPageConds" resultMap="get-ZUser-result" parameterClass="com.linjj.thinkweixin.common.Params">
+        SELECT userId userId,userName userName,passWord passWord,createDate createDate 
+		from ( select D.*, ROWNUM RN 
+		   from (
+				SELECT userId userId,userName userName,passWord passWord,createDate createDate 
+				FROM t_user A
+                <isNotNull prepend=" WHERE " property="conditions" >
+			      $conditions$
+			    </isNotNull>
+			    <isNotNull prepend=" order by " property="order" >
+			      $order$
+			    </isNotNull>
+		) D
+		where ROWNUM &lt;= #endNum# ) WHERE RN &gt;=#startNum#
+  </select>
+
+  <!--findByObj 通过具体对象取得。返回list-->
+   <select id="findAllbyObj" resultMap="get-ZUser-result" parameterClass="Zuser">
+    SELECT userId userId,userName userName,passWord passWord,createDate createDate
+      FROM t_user
+    <dynamic prepend=" WHERE " >
+      
+      <isNotNull prepend=" and " property="userId" >
+                    userId = #userId#
+                  </isNotNull>
+      
+        <isNotNull prepend=" and " property="userName" >
+                    userName = #userName#
+                  </isNotNull>
+                  
+        <isNotNull prepend=" and " property="passWord" >
+                    passWord = #passWord#
+                  </isNotNull>
+      
+        <isNotNull prepend=" and " property="createDate" >
+                    "createDate" = #"createDate"#
+                  </isNotNull>
+       
+      
+    </dynamic>
+  </select>
+
+  <!--更新部分内容-->
+  <update id="updateByObj" parameterClass="ZUser">
+    UPDATE t_user
+    <dynamic prepend="set" >
+      
+        <isNotNull prepend="," property="userId" >
+                    userId = #userId#
+                  </isNotNull>
+      
+        <isNotNull prepend="," property="userName" >
+                    userName = #userName#
+                  </isNotNull>
+                  
+        <isNotNull prepend="," property="passWord" >
+                    passWord = #passWord#
+                  </isNotNull>
+      
+        <isNotNull prepend="," property="createDate" >
+                    "createDate" = #"createDate"#
+                  </isNotNull>
+      
+    </dynamic>
+    WHERE userId = #userId#
+  </update>
+
+  <!--更新全部内容-->
+  <update id="updateByExample" parameterClass="ZUser">
+    UPDATE t_user
+    SET userId=#userId#,userName=#userName#,passWord=#passWord#,createDate=#createDate#
+    WHERE userId = #userId#
+  </update>
+
+
+  <update id="updateAttrByPK" parameterClass="com.linjj.thinkweixin.common.Params">
+    UPDATE t_user
+    SET $name1$ = #value1#
+    WHERE $name$ = #value#
+  </update>
+
+  <update id="updateAttrByCondition" parameterClass="com.linjj.thinkweixin.common.Params">
+    UPDATE t_user
+    SET $name1$ = #value1#
+    <isNotNull prepend=" where " property="conditions" >
+      $conditions$
+    </isNotNull>
+  </update>
+
+  <!--通过主键删除-->
+  <delete id="deleteByPk" parameterClass="com.linjj.thinkweixin.common.Params">
+    DELETE FROM t_user
+      WHERE $name$ = #value#
+  </delete>
+
+  <!--通过条件删除-->
+  <delete id="deleteByConds" parameterClass="com.linjj.thinkweixin.common.Params">
+    DELETE FROM t_user
+      WHERE $conditions$
+  </delete>
+
+  <!--插入-->
+  <insert id="insertInTo" parameterClass="ZUser" >
+    INSERT INTO t_user(userId,userName,passWord,createDate)
+      VALUES (#userId#,#userName#,#passWord#,#createDate#)
+  </insert>
+
+  <!--统计总数-->
+  <select id="countByConds" resultClass="java.lang.Integer" parameterClass="com.linjj.thinkweixin.common.Params">
+    SELECT count(1) FROM t_user A WHERE $conditions$
+  </select>
+  <!--登陆-->
+ <select id="login" resultMap="get-ZUser-result" parameterClass="com.linjj.thinkweixin.common.Params">
+		<![CDATA[
+			 SELECT userId userId,userName userName,passWord passWord,createDate createDate
+      FROM t_user
+      WHERE   $conditions$
+		]]>
+	</select>
+	
+  <select id="countByObj" parameterClass="ZUser" resultClass="java.lang.Integer" >
+    SELECT count(1) FROM t_user
+    <dynamic prepend=" WHERE " >
+      
+        <isNotNull prepend=" and " property="userId" >
+                    userId = #userId#
+                  </isNotNull>
+      
+        <isNotNull prepend=" and " property="userName" >
+                    userName = #userName#
+                  </isNotNull>
+                  
+        <isNotNull prepend=" and " property="passWord" >
+                    passWord = #passWord#
+                  </isNotNull>
+      
+        <isNotNull prepend=" and " property="createDate" >
+                    "createDate" = #"createDate"#
+                  </isNotNull>
+      
+    </dynamic>
+  </select>
+  
+<!--
+/*BEGIN*/
+//注意请勿修改BEGIN和END两行!!!!!!
+/*请在此处进行所需要的修改,出了BEGIN END注释块进行的修改将在下一次生成时被覆盖*/
+-->
+  
+<!--
+/*END*/
+-->
+
+</sqlMap>

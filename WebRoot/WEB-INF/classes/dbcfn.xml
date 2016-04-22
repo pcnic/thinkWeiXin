@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="gb2312"?>
+<config>
+   <pool>
+     <!--  "Default Connect Pool Created By System"是默认的连接池名，该名称不得随意更改 -->
+     <name>Default Connect Pool Created By System</name>
+     
+     <!--  驱动程序包名 -->
+     <drivername>com.mysql.jdbc.Driver</drivername>
+     
+     <!--  连接数据库的URL地址  192.168.6.107:1521:ora9-->      
+     <url>jdbc:mysql://localhost:3306/thinkweixin?useUnicode=true&amp;characterEncoding=utf8</url>  
+     <!--  登录数据库用户名  -->
+     <user>root</user>
+     
+     <pwd>123456</pwd>
+     
+     <!--  该连接池最大连接数  -->
+     <max>10</max>
+     
+     <!--  该连接池最小连接数  -->
+     <min>6</min>
+   </pool>
+   
+   <!--  在下面可以再增加数据库连接  -->
+</config>

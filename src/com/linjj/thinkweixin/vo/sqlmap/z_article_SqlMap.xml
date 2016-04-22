@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="z_article">
+  <typeAlias alias="ZArticle" type="com.linjj.thinkweixin.vo.ZArticle" />
+  <!-- for common use -->
+  <resultMap id="get-ZArticle-result" class="ZArticle">
+        <result property="articleId" column="articleId" />
+        <result property="articleName" column="articleName" />
+        <result property="articleInfo" column="articleInfo" />
+        <result property="articleCreateDate" column="articleCreateDate" />
+        
+  </resultMap>
+
+  <!-- for other join result map-->
+  <resultMap id="join-z_article-result" class="ZArticle">
+        <result property="articleId" column="z_article__articleId" />
+        <result property="articleName" column="z_article__articleName" />
+        <result property="articleInfo" column="z_article__articleInfo" />
+        <result property="articleCreateDate" column="z_article__articleCreateDate" />
+  </resultMap>
+  
+
+  <!--findBy 通过唯一关键字取得- 返回具体对象-->
+  <select id="findByPk" resultMap="get-ZArticle-result" parameterClass="com.linjj.thinkweixin.common.Params">
+    SELECT articleId articleId,articleName articleName,articleInfo articleInfo,articleCreateDate articleCreateDate
+      FROM t_article
+      WHERE $name$ = #value#
+    <isNotNull prepend=" AND " property="conditions" >
+      $conditions$
+    </isNotNull>
+  </select>
+    <!--findAll 通过conditons取得，需要注意sql注入问题。返回list-->
+    <select id="findAllbyConds" resultMap="get-ZArticle-result" parameterClass="com.linjj.thinkweixin.common.Params">
+    SELECT articleId articleId,articleName articleName,articleInfo articleInfo,articleCreateDate articleCreateDate
+      FROM t_article
+    <isNotNull prepend=" WHERE " property="conditions" >
+      $conditions$
+    </isNotNull>
+    <isNotNull prepend=" order by " property="order" >
+      $order$
+    </isNotNull>
+  </select>
+  
+
+  <!--findAllbyPage 通过分页信息及conditons取得，需要注意sql注入问题。返回list-->
+    <select id="findAllbyPageConds" resultMap="get-ZArticle-result" parameterClass="com.linjj.thinkweixin.common.Params">
+        SELECT articleId articleId,articleName articleName,articleInfo articleInfo,articleCreateDate articleCreateDate 
+		from ( select D.*, ROWNUM RN 
+		   from (
+				SELECT articleId articleId,articleName articleName,articleInfo articleInfo,articleCreateDate articleCreateDate 
+				FROM t_article A
+                <isNotNull prepend=" WHERE " property="conditions" >
+			      $conditions$
+			    </isNotNull>
+			    <isNotNull prepend=" order by " property="order" >
+			      $order$
+			    </isNotNull>
+		) D
+		where ROWNUM &lt;= #endNum# ) WHERE RN &gt;=#startNum#
+  </select>
+
+  <!--findByObj 通过具体对象取得。返回list-->
+   <select id="findAllbyObj" resultMap="get-ZArticle-result" parameterClass="ZArticle">
+    SELECT articleId articleId,articleName articleName,articleInfo articleInfo,articleCreateDate articleCreateDate
+      FROM t_article
+    <dynamic prepend=" WHERE " >
+      
+      <isNotNull prepend=" and " property="articleId" >
+                    articleId = #articleId#
+                  </isNotNull>
+      
+        <isNotNull prepend=" and " property="articleName" >
+                    articleName = #articleName#
+                  </isNotNull>
+                  
+        <isNotNull prepend=" and " property="articleInfo" >
+                    articleInfo = #articleInfo#
+                  </isNotNull>
+      
+        <isNotNull prepend=" and " property="articleCreateDate" >
+                    "articleCreateDate" = #"articleCreateDate"#
+                  </isNotNull>
+       
+      
+    </dynamic>
+  </select>
+
+  <!--更新部分内容-->
+  <update id="updateByObj" parameterClass="ZArticle">
+    UPDATE t_article
+    <dynamic prepend="set" >
+      
+        <isNotNull prepend="," property="articleId" >
+                    articleId = #articleId#
+                  </isNotNull>
+      
+        <isNotNull prepend="," property="articleName" >
+                    articleName = #articleName#
+                  </isNotNull>
+                  
+        <isNotNull prepend="," property="articleInfo" >
+                    articleInfo = #articleInfo#
+                  </isNotNull>
+      
+        <isNotNull prepend="," property="articleCreateDate" >
+                    "articleCreateDate" = #"articleCreateDate"#
+                  </isNotNull>
+      
+    </dynamic>
+    WHERE articleId = #articleId#
+  </update>
+
+  <!--更新全部内容-->
+  <update id="updateByExample" parameterClass="ZArticle">
+    UPDATE t_article
+    SET articleId=#articleId#,articleName=#articleName#,articleInfo=#articleInfo#,articleCreateDate=#articleCreateDate#
+    WHERE articleId = #articleId#
+  </update>
+
+
+  <update id="updateAttrByPK" parameterClass="com.linjj.thinkweixin.common.Params">
+    UPDATE t_article
+    SET $name1$ = #value1#
+    WHERE $name$ = #value#
+  </update>
+
+  <update id="updateAttrByCondition" parameterClass="com.linjj.thinkweixin.common.Params">
+    UPDATE t_article
+    SET $name1$ = #value1#
+    <isNotNull prepend=" where " property="conditions" >
+      $conditions$
+    </isNotNull>
+  </update>
+
+  <!--通过主键删除-->
+  <delete id="deleteByPk" parameterClass="com.linjj.thinkweixin.common.Params">
+    DELETE FROM t_article
+      WHERE $name$ = #value#
+  </delete>
+
+  <!--通过条件删除-->
+  <delete id="deleteByConds" parameterClass="com.linjj.thinkweixin.common.Params">
+    DELETE FROM t_article
+      WHERE $conditions$
+  </delete>
+
+  <!--插入-->
+  <insert id="insertInTo" parameterClass="ZArticle" >
+    INSERT INTO t_article(articleId,articleName,articleInfo,articleCreateDate)
+      VALUES (#articleId#,#articleName#,#articleInfo#,#articleCreateDate#)
+  </insert>
+
+  <!--统计总数-->
+  <select id="countByConds" resultClass="java.lang.Integer" parameterClass="com.linjj.thinkweixin.common.Params">
+    SELECT count(1) FROM t_article A WHERE $conditions$
+  </select>
+  <!--登陆-->
+ <select id="login" resultMap="get-ZArticle-result" parameterClass="com.linjj.thinkweixin.common.Params">
+		<![CDATA[
+			 SELECT articleId articleId,articleName articleName,articleInfo articleInfo,articleCreateDate articleCreateDate
+      FROM t_article
+      WHERE   $conditions$
+		]]>
+	</select>
+	
+  <select id="countByObj" parameterClass="ZArticle" resultClass="java.lang.Integer" >
+    SELECT count(1) FROM t_article
+    <dynamic prepend=" WHERE " >
+      
+        <isNotNull prepend=" and " property="articleId" >
+                    articleId = #articleId#
+                  </isNotNull>
+      
+        <isNotNull prepend=" and " property="articleName" >
+                    articleName = #articleName#
+                  </isNotNull>
+                  
+        <isNotNull prepend=" and " property="articleInfo" >
+                    articleInfo = #articleInfo#
+                  </isNotNull>
+      
+        <isNotNull prepend=" and " property="articleCreateDate" >
+                    "articleCreateDate" = #"articleCreateDate"#
+                  </isNotNull>
+      
+    </dynamic>
+  </select>
+  
+<!--
+/*BEGIN*/
+//注意请勿修改BEGIN和END两行!!!!!!
+/*请在此处进行所需要的修改,出了BEGIN END注释块进行的修改将在下一次生成时被覆盖*/
+-->
+  
+<!--
+/*END*/
+-->
+
+</sqlMap>

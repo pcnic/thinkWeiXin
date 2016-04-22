@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="z_sequence">
+  <typeAlias alias="ZSequence" type="com.sunnada.mmedia.vo.ZSequence" />
+  <!-- for common use -->
+  <resultMap id="get-ZSequence-result" class="ZSequence">
+        <result property="TNAME" column="TNAME" />
+        <result property="SEQVALUE" column="SEQVALUE" />
+  </resultMap>
+
+  <!-- for other join result map-->
+  <resultMap id="join-z_sequence-result" class="ZSequence">
+        <result property="TNAME" column="z_sequence__TNAME" />
+        <result property="SEQVALUE" column="z_sequence__SEQVALUE" />
+  </resultMap>
+  
+
+  <!--findBy 通过唯一关键字取得- 返回具体对象-->
+  <select id="findByPk" resultMap="get-ZSequence-result" parameterClass="com.sunnada.mmedia.common.Params">
+    SELECT TNAME TNAME,SEQVALUE SEQVALUE
+      FROM z_sequence
+      WHERE $name$ = #value#
+    <isNotNull prepend=" AND " property="conditions" >
+      $conditions$
+    </isNotNull>
+  </select>
+    <!--findAll 通过conditons取得，需要注意sql注入问题。返回list-->
+    <select id="findAllbyConds" resultMap="get-ZSequence-result" parameterClass="com.sunnada.mmedia.common.Params">
+    SELECT TNAME TNAME,SEQVALUE SEQVALUE
+      FROM z_sequence
+    <isNotNull prepend=" WHERE " property="conditions" >
+      $conditions$
+    </isNotNull>
+    <isNotNull prepend=" order by " property="order" >
+      $order$
+    </isNotNull>
+  </select>
+
+  <!--findAllbyPage 通过分页信息及conditons取得，需要注意sql注入问题。返回list-->
+    <select id="findAllbyPageConds" resultMap="get-ZSequence-result" parameterClass="com.sunnada.mmedia.common.Params">
+        select TNAME TNAME,SEQVALUE SEQVALUE 
+		from ( select D.*, ROWNUM RN 
+		   from (
+				select TNAME TNAME,SEQVALUE SEQVALUE 
+				FROM z_sequence 
+                <isNotNull prepend=" WHERE " property="conditions" >
+			      $conditions$
+			    </isNotNull>
+			    <isNotNull prepend=" order by " property="order" >
+			      $order$
+			    </isNotNull>
+		) D
+		where ROWNUM &lt;= #endNum# ) WHERE RN &gt;=#startNum#
+  </select>
+
+  <!--findByObj 通过具体对象取得。返回list-->
+   <select id="findAllbyObj" resultMap="get-ZSequence-result" parameterClass="ZSequence">
+    SELECT TNAME TNAME,SEQVALUE SEQVALUE
+      FROM z_sequence
+    <dynamic prepend=" WHERE " >
+      
+        <isNotNull prepend=" and " property="TNAME" >
+          TNAME = #TNAME#
+        </isNotNull>
+      
+        <isNotNull prepend=" and " property="SEQVALUE" >
+          SEQVALUE = #SEQVALUE#
+        </isNotNull>
+      
+    </dynamic>
+  </select>
+
+  <!--更新部分内容-->
+  <update id="updateByObj" parameterClass="ZSequence">
+    UPDATE z_sequence
+    <dynamic prepend="set" >
+      
+        <isNotNull prepend="," property="TNAME" >
+                    TNAME = #TNAME#
+                  </isNotNull>
+      
+        <isNotNull prepend="," property="SEQVALUE" >
+                    SEQVALUE = #SEQVALUE#
+                  </isNotNull>
+      
+    </dynamic>
+    WHERE TNAME = #TNAME#
+  </update>
+
+  <!--更新全部内容-->
+  <update id="updateByExample" parameterClass="ZSequence">
+    UPDATE z_sequence
+    SET TNAME=#TNAME#,SEQVALUE=#SEQVALUE#
+    WHERE TNAME = #TNAME#
+  </update>
+
+
+  <update id="updateAttrByPK" parameterClass="com.sunnada.mmedia.common.Params">
+    UPDATE z_sequence
+    SET $name1$ = #value1#
+    WHERE $name$ = #value#
+  </update>
+
+  <update id="updateAttrByCondition" parameterClass="com.sunnada.mmedia.common.Params">
+    UPDATE z_sequence
+    SET $name1$ = #value1#
+    <isNotNull prepend=" where " property="conditions" >
+      $conditions$
+    </isNotNull>
+  </update>
+
+  <!--通过主键删除-->
+  <delete id="deleteByPk" parameterClass="com.sunnada.mmedia.common.Params">
+    DELETE FROM z_sequence
+      WHERE $name$ = #value#
+  </delete>
+
+  <!--通过条件删除-->
+  <delete id="deleteByConds" parameterClass="com.sunnada.mmedia.common.Params">
+    DELETE FROM z_sequence
+      WHERE $conditions$
+  </delete>
+
+  <!--插入-->
+  <insert id="insertInTo" parameterClass="ZSequence" >
+    INSERT INTO z_sequence(TNAME,SEQVALUE)
+      VALUES (#TNAME#,#SEQVALUE#)
+  </insert>
+
+  <!--统计总数-->
+  <select id="countByConds" resultClass="java.lang.Integer" parameterClass="com.sunnada.mmedia.common.Params">
+    SELECT count(1) FROM z_sequence WHERE $conditions$
+  </select>
+
+  <select id="countByObj" parameterClass="ZSequence" resultClass="java.lang.Integer" >
+    SELECT count(1) FROM z_sequence
+    <dynamic prepend=" WHERE " >
+      
+        <isNotNull prepend=" and " property="TNAME" >
+          TNAME = #TNAME#
+        </isNotNull>
+      
+        <isNotNull prepend=" and " property="SEQVALUE" >
+          SEQVALUE = #SEQVALUE#
+        </isNotNull>
+      
+    </dynamic>
+  </select>
+  
+<!--
+/*BEGIN*/
+//注意请勿修改BEGIN和END两行!!!!!!
+/*请在此处进行所需要的修改,出了BEGIN END注释块进行的修改将在下一次生成时被覆盖*/
+-->
+<!--
+/*END*/
+-->
+
+</sqlMap>
